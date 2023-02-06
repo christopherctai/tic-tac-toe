@@ -1,21 +1,35 @@
-const gameboard = (function() {
-    let gameboard = []; 
+const playGameButton = document.querySelector('.play-game');
+const form = document.querySelector('.player-info');
+const submitButton = document.querySelector('.submit');
+let labelBanner = document.querySelector('#player-name');
+let playerInput = document.querySelector('#player');
+let infoBanner = document.querySelector('.info-banner');
+let playerOneTitle = document.querySelector('.player-one');
+let playerTwoTitle = document.querySelector('.player-two');
+let playerOneScore = document.querySelector('.player-one-score');
+let playerTwoScore = document.querySelector('.player-two-score');
+let gameArea = document.querySelector('.gameboard');
 
-    
+playGameButton.addEventListener('click', () => {
+    gameplay.playGame();
+});
+
+
+form.classList.add('hidden');
+infoBanner.classList.add('hidden');
+
+const gameboard = (function() {
+    let _gameboard = [];
     function addMove() {
         // add a move to the gameboard
         // then display the gameboard 
     }
-    
-    function displayGameboard() {
+    function _displayGameboard() {
         // display the gameboard 
-        // check to see if a player won the game 
     }
-
     function clearBoard() {
         // clear the gameboard 
     }
-
     return {
         addMove: addMove,
         clearBoard: clearBoard
@@ -26,13 +40,51 @@ const gameboard = (function() {
 const gameplay = (function() {
     function playGame() {
         // play a game
+        // first, gather player information and assign info to players 
+        let playerNames =_getPlayerInfo();
+        let playerOne = playerFactory(playerNames[0], 'X');
+        let playerTwo = playerFactory(playerNames[1], 'O');
+        console.log(playerOne, playerTwo);
+        // second, play one round of tic-tac-toe 
+
+
+        // third, evaluate who ultimately wins a game to three 
+
     }
 
-    function getPlayerInfo() {
+    function _getPlayerInfo() {
         // get the name of the players 
+        form.classList.toggle('hidden');
+        playGameButton.classList.toggle('hidden');
+        let names = [];
+        let i = 0; 
+        submitButton.addEventListener('click', () => {
+            names.push(_submitPlayerInfo(i));
+            i++;
+        });
+        console.log(names);
+        return names;
+    }
+
+    function _submitPlayerInfo(i) {
+        let player = playerInput.value;
+        if (i === 0) {
+            playerOneTitle.textContent = `${player}:`;
+            playerInput.value = '';
+            labelBanner.textContent = 'Enter Player 2 Name'
+        } else {
+            playerTwoTitle.textContent = `${player}:`;
+            form.classList.toggle('hidden');
+            infoBanner.classList.toggle('hidden');
+        } 
+        return player;
+    }
+
+    function _createPlayers() {
+        
     }
     
-    function playerTurn() {
+    function _playerTurn() {
         // give a player a turn 
     }
 
@@ -43,11 +95,22 @@ const gameplay = (function() {
     function checkWinGame() {
         // check to see if a player won the game 
     }
+
+    function reset() {
+        // reset the game board and everything 
+    }
+
+    return {
+        playGame: playGame,
+        checkWinRound: checkWinRound,
+        checkWinGame: checkWinGame, 
+        reset: reset
+    }
 })()
 
 
-const personFactory = (name, symbol) => {
-    let score = 0;
+const playerFactory = (name, symbol) => {
+    let _score = 0;
     function playMove() {
         // add a move to the gameboard 
     }
@@ -56,7 +119,6 @@ const personFactory = (name, symbol) => {
     }
     return {name, symbol, playMove, declareVictory}
 }
-
 
 
 /* 

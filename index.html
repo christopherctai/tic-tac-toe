@@ -14,22 +14,23 @@
     </div>
     <div class="main-content">
         <div class="player-top">
+            <button class="btn play-game" type="button">PLAY GAME</button>
             <form action="" method="post" class="player-info">
                 <label for="player" id="player-name">Enter Player 1 Name</label>
-                <input type="text" placeholder="What's your name?" id="player" name="player" maxlength="30">
-                <button type="submit" class="btn">Submit!</button>
+                <input type="text" placeholder="What's your name?" id="player" name="player" maxlength="30" autocomplete="off">
+                <button type="button" class="btn submit">Submit!</button>
             </form>
-            <div class="current-player">
+            <div class="info-banner">
                 Player 1 Turn!
             </div>
         </div>
         <div class="scoreboard-row">
             <div class="player-one">Player 1:</div>
-            <div class="score">0</div>
+            <div class="player-one-score">0</div>
         </div>
         <div class="scoreboard-row">
             <div class="player-two">Player 2:</div>
-            <div class="score">0</div>
+            <div class="player-two-score">0</div>
         </div>
         <div class="gameboard">
             <div class="square"></div>

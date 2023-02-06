@@ -124,6 +124,13 @@ input[type='text']:focus {
     width: 100px;
     height: 100px;
 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+
+    font-size: 70px;
+    font-weight: 700;
+
     cursor: pointer;
 }
 

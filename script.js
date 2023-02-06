@@ -15,31 +15,38 @@ playGameButton.addEventListener('click', () => {
 });
 
 
-form.classList.add('hidden');
-infoBanner.classList.add('hidden');
-
 const gameboard = (function() {
-    let _gameboard = [];
-    function addMove() {
-        // add a move to the gameboard
-        // then display the gameboard 
-    }
-    function _displayGameboard() {
+    let gameboard = ['', '', '', '', '', '', '', '', ''];
+    
+    function displayGameboard() {
         // display the gameboard 
+        gameArea.textContent = "";
+        for (let i = 0; i < 9; i++) {
+            let square = document.createElement('div');
+            square.classList.add('square');
+            square.textContent = gameboard[i];
+            gameArea.append(square);
+        }
     }
     function clearBoard() {
         // clear the gameboard 
     }
     return {
-        addMove: addMove,
+        gameboard: gameboard,
+        displayGameboard: displayGameboard,
         clearBoard: clearBoard
     }
 })();
+
+form.classList.add('hidden');
+infoBanner.classList.add('hidden');
+gameboard.displayGameboard();
 
 
 const gameplay = (function() {
     let playerOne;
     let playerTwo;
+    let _playX = true;
 
     function playGame() {
         // play a game
@@ -47,7 +54,7 @@ const gameplay = (function() {
         _getPlayerInfo();
         
         // second, play one round of tic-tac-toe 
-
+        _playRound();
 
         // third, evaluate who ultimately wins a game to three 
     }
@@ -76,11 +83,31 @@ const gameplay = (function() {
             form.classList.toggle('hidden');
             infoBanner.classList.toggle('hidden');
         } 
-        console.log(playerOne, playerTwo);
     }
-    
-    function _playerTurn() {
-        // give a player a turn 
+
+    function _playRound() {
+        let squares = document.querySelectorAll('.square');
+        let squaresArray = Array.from(squares);
+        squaresArray.forEach((square) => {
+            square.addEventListener('click', () => {
+                addMove(squaresArray.indexOf(square));
+                console.log(squaresArray.indexOf(square));
+            });
+        });
+    }
+
+    function addMove(i) {
+        // add a move to the gameboard
+        // then display the gameboard 
+        if (_playX) {
+            gameboard.gameboard[i] = 'X';
+            _playX = false;
+        } else {
+            gameboard.gameboard[i] = 'O';
+            _playX = true;
+        }
+        gameboard.displayGameboard();
+        _playRound();
     }
 
     function checkWinRound() {

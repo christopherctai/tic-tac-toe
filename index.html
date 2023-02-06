@@ -5,8 +5,44 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    
+    <div class="header">
+        <div class="title">Tic-Tac-Toe Showdown</div>
+    </div>
+    <div class="main-content">
+        <div class="player-top">
+            <form action="" method="post" class="player-info">
+                <label for="player" id="player-name">Enter Player 1 Name</label>
+                <input type="text" placeholder="What's your name?" id="player" name="player" maxlength="30">
+                <button type="submit" class="btn">Submit!</button>
+            </form>
+            <div class="current-player">
+                Player 1 Turn!
+            </div>
+        </div>
+        <div class="scoreboard-row">
+            <div class="player-one">Player 1:</div>
+            <div class="score">0</div>
+        </div>
+        <div class="scoreboard-row">
+            <div class="player-two">Player 2:</div>
+            <div class="score">0</div>
+        </div>
+        <div class="gameboard">
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+        </div>
+    </div>
+    <div class="footer">Copyright Chris Tai 2023</div>
 </body>
 </html>

@@ -99,10 +99,12 @@ const gameplay = (function() {
     function addMove(i) {
         // add a move to the gameboard
         // then display the gameboard 
-        if (_playX) {
+        if (gameboard.gameboard[i]) {
+            _playRound();
+        } else if (_playX) {
             gameboard.gameboard[i] = 'X';
             _playX = false;
-        } else {
+        } else if (!_playX) {
             gameboard.gameboard[i] = 'O';
             _playX = true;
         }

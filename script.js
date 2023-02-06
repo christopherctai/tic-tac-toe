@@ -38,50 +38,45 @@ const gameboard = (function() {
 
 
 const gameplay = (function() {
+    let playerOne;
+    let playerTwo;
+
     function playGame() {
         // play a game
         // first, gather player information and assign info to players 
-        let playerNames =_getPlayerInfo();
-        let playerOne = playerFactory(playerNames[0], 'X');
-        let playerTwo = playerFactory(playerNames[1], 'O');
-        console.log(playerOne, playerTwo);
+        _getPlayerInfo();
+        
         // second, play one round of tic-tac-toe 
 
 
         // third, evaluate who ultimately wins a game to three 
-
     }
 
     function _getPlayerInfo() {
         // get the name of the players 
         form.classList.toggle('hidden');
         playGameButton.classList.toggle('hidden');
-        let names = [];
         let i = 0; 
         submitButton.addEventListener('click', () => {
-            names.push(_submitPlayerInfo(i));
+            _submitPlayerInfo(i);
             i++;
         });
-        console.log(names);
-        return names;
     }
 
     function _submitPlayerInfo(i) {
         let player = playerInput.value;
         if (i === 0) {
             playerOneTitle.textContent = `${player}:`;
+            playerOne = playerFactory(player, 'X');
             playerInput.value = '';
             labelBanner.textContent = 'Enter Player 2 Name'
         } else {
             playerTwoTitle.textContent = `${player}:`;
+            playerTwo = playerFactory(player, 'O');
             form.classList.toggle('hidden');
             infoBanner.classList.toggle('hidden');
         } 
-        return player;
-    }
-
-    function _createPlayers() {
-        
+        console.log(playerOne, playerTwo);
     }
     
     function _playerTurn() {

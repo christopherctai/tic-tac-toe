@@ -12,11 +12,6 @@ let playerOneScore = document.querySelector('.player-one-score');
 let playerTwoScore = document.querySelector('.player-two-score');
 let gameArea = document.querySelector('.gameboard');
 
-playGameButton.addEventListener('click', () => {
-    gameplay.playGame();
-});
-
-
 const gameboard = (function() {
     let gameboard = ['', '', '', '', '', '', '', '', ''];
     
@@ -58,6 +53,10 @@ const gameplay = (function() {
     let playerOne;
     let playerTwo;
     let symbol = 'X';
+
+    playGameButton.addEventListener('click', () => {
+        playGame();
+    });
 
     function playGame() {
         // play a game
@@ -108,21 +107,47 @@ const gameplay = (function() {
     function addMove(i) {
         // add a move to the gameboard
         // then display the gameboard 
+        let roundWon;
         if (gameboard.gameboard[i]) {
             return;
         } else if (symbol === 'X') {
             gameboard.gameboard[i] = symbol;
             infoBanner.textContent = `${playerTwo.name}'s Turn!`;
-            checkWinRound(symbol);
+            roundWon = checkWinRound(symbol);
+            if (roundWon) {
+                gameboard.displayGameboard();
+                return;
+            }
             symbol = 'O';
         } else if (symbol === 'O') {
             gameboard.gameboard[i] = symbol;
             infoBanner.textContent = `${playerOne.name}'s Turn!`;
-            checkWinRound(symbol);
+            roundWon = checkWinRound(symbol);
+            if (roundWon) {
+                gameboard.displayGameboard();
+                return;
+            }
             symbol = 'X';
         }
+        if (checkCatsGame()) {
+            declareCatsGame();
+        };
         gameboard.displayGameboard();
         _prepareBoard();
+    }
+
+    function checkCatsGame() {
+        for (let i = 0; i < 9; i++) {
+            if (gameboard.gameboard[i] === '') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function declareCatsGame() {
+        nextRoundButton.classList.remove('hidden');
+        infoBanner.textContent = "It's a cat's game!";
     }
 
     function checkWinRound(symbol) {
@@ -134,7 +159,7 @@ const gameplay = (function() {
                 && gameboard.gameboard[i + 2] === symbol) {
                 declareVictoryRound(symbol);
                 checkWinGame();
-                return;
+                return true;
             } 
         }
 
@@ -145,7 +170,7 @@ const gameplay = (function() {
                 && gameboard.gameboard[i + 6] === symbol) {
                 declareVictoryRound(symbol);
                 checkWinGame();
-                return;
+                return true;
             }
         }
 
@@ -155,15 +180,16 @@ const gameplay = (function() {
             && gameboard.gameboard[8] === symbol) {
             declareVictoryRound(symbol);
             checkWinGame();
-            return;
+            return true;
         }
         if (gameboard.gameboard[2] === symbol
             && gameboard.gameboard[4] === symbol
             && gameboard.gameboard[6] === symbol) {
             declareVictoryRound(symbol);
             checkWinGame();
-            return;
+            return true;
         }
+        return false;
     }
 
     function declareVictoryRound(symbol) {

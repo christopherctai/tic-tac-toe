@@ -46,7 +46,7 @@ gameboard.displayGameboard();
 const gameplay = (function() {
     let playerOne;
     let playerTwo;
-    let _playX = true;
+    let symbol = 'X';
 
     function playGame() {
         // play a game
@@ -101,19 +101,64 @@ const gameplay = (function() {
         // then display the gameboard 
         if (gameboard.gameboard[i]) {
             _playRound();
-        } else if (_playX) {
-            gameboard.gameboard[i] = 'X';
-            _playX = false;
-        } else if (!_playX) {
-            gameboard.gameboard[i] = 'O';
-            _playX = true;
+        } else if (symbol === 'X') {
+            gameboard.gameboard[i] = symbol;
+            checkWinRound(symbol);
+            symbol = 'O';
+        } else if (symbol === 'O') {
+            gameboard.gameboard[i] = symbol;
+            checkWinRound(symbol);
+            symbol = 'X';
         }
         gameboard.displayGameboard();
         _playRound();
     }
 
-    function checkWinRound() {
+    function checkWinRound(symbol) {
         // check to see if a player won the round
+
+        // check rows
+        for (let i = 0; i < 9; i += 3) {
+            if (gameboard.gameboard[i] === symbol 
+                && gameboard.gameboard[i + 1] === symbol
+                && gameboard.gameboard[i + 2] === symbol) {
+                declareVictory(symbol);
+                return;
+            } 
+        }
+
+        // check columns
+        for (let i = 0; i < 3; i++) {
+            if (gameboard.gameboard[i] === symbol 
+                && gameboard.gameboard[i + 3] === symbol
+                && gameboard.gameboard[i + 6] === symbol) {
+                declareVictory(symbol);
+                return;
+            }
+        }
+
+        // check diagonals
+        if (gameboard.gameboard[0] === symbol 
+            && gameboard.gameboard[4] === symbol
+            && gameboard.gameboard[8] === symbol) {
+            declareVictory(symbol);
+            return;
+        }
+        if (gameboard.gameboard[2] === symbol
+            && gameboard.gameboard[4] === symbol
+            && gameboard.gameboard[6] === symbol) {
+            declareVictory(symbol);
+            return;
+        }
+    }
+
+    function declareVictory(symbol) {
+        // declare that a player has won the game 
+        if (symbol === 'X') {
+            infoBanner.textContent = `${playerOne.name} wins the round!`
+        } else {
+            infoBanner.textContent = `${playerTwo.name} wins the round!`
+        }
     }
 
     function checkWinGame() {

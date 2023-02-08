@@ -2,6 +2,7 @@ const playGameButton = document.querySelector('.play-game');
 const form = document.querySelector('.player-info');
 const submitButton = document.querySelector('.submit');
 const nextRoundButton = document.querySelector('.next-round');
+const playAgainButton = document.querySelector('.play-again');
 let labelBanner = document.querySelector('#player-name');
 let playerInput = document.querySelector('#player');
 let infoBanner = document.querySelector('.info-banner');
@@ -49,6 +50,7 @@ const gameboard = (function() {
 form.classList.add('hidden');
 infoBanner.classList.add('hidden');
 nextRoundButton.classList.add('hidden');
+playAgainButton.classList.add('hidden');
 gameboard.displayGameboard();
 
 
@@ -60,14 +62,13 @@ const gameplay = (function() {
     function playGame() {
         // play a game
         // first, gather player information and assign info to players 
-        _getPlayerInfo();
+        _getPlayerInfo(0);
     }
 
-    function _getPlayerInfo() {
+    function _getPlayerInfo(i) {
         // get the name of the players 
         form.classList.toggle('hidden');
         playGameButton.classList.toggle('hidden');
-        let i = 0; 
         submitButton.addEventListener('click', () => {
             _submitPlayerInfo(i);
             i++;
@@ -170,11 +171,11 @@ const gameplay = (function() {
         if (symbol === 'X') {
             infoBanner.textContent = `${playerOne.name} wins the round!`
             playerOneScore.textContent++;
-            resetRound();
+            nextRoundButton.classList.remove('hidden');
         } else {
             infoBanner.textContent = `${playerTwo.name} wins the round!`
             playerTwoScore.textContent++;
-            resetRound();
+            nextRoundButton.classList.remove('hidden');
         }
     }
 
@@ -192,20 +193,31 @@ const gameplay = (function() {
     }
     
     nextRoundButton.addEventListener('click', () => {
+        resetRound();
+    })
+
+    playAgainButton.addEventListener('click', () => {
+        resetGame();
+    })
+
+    function resetRound() {
+        // reset the game board to play the next round 
         nextRoundButton.classList.add('hidden');
         infoBanner.textContent = `${playerOne.name}'s Turn!`;
         gameboard.clearBoard();
         _prepareBoard();
         symbol = 'X';
-    })
-
-    function resetRound() {
-        // reset the game board to play the next round 
-        nextRoundButton.classList.remove('hidden');
     }
 
     function resetGame() {
-        // hi
+        // reset the entire game and form to play again
+        playAgainButton.classList.add('hidden');
+        gameboard.clearBoard();
+        symbol = 'X';
+        infoBanner.textContent = `${playerOne.name}'s Turn!`; 
+        playerOneScore.textContent = '0';
+        playerTwoScore.textContent = '0';
+        _prepareBoard();
     }
 
     return {
@@ -218,14 +230,7 @@ const gameplay = (function() {
 
 
 const playerFactory = (name, symbol) => {
-    let _score = 0;
-    function playMove() {
-        // add a move to the gameboard 
-    }
-    function declareVictory() {
-        // check score and declare victory
-    }
-    return {name, symbol, playMove, declareVictory}
+    return {name} 
 }
 
 

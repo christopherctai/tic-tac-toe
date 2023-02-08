@@ -28,12 +28,17 @@ const gameboard = (function() {
             square.textContent = gameboard[i];
             gameArea.append(square);
         }
+
     }
+
     function clearBoard() {
         // clear the gameboard 
-        gameboard = ['', '', '', '', '', '', '', '', ''];
+        for (let i = 0; i < 9; i++) {
+            gameboard[i] = '';
+        }
         displayGameboard();
     }
+
     return {
         gameboard: gameboard,
         displayGameboard: displayGameboard,
@@ -77,6 +82,7 @@ const gameplay = (function() {
             playerTwo = playerFactory(player, 'O');
             form.classList.toggle('hidden');
             infoBanner.classList.toggle('hidden');
+            infoBanner.textContent = `${playerOne.name}'s turn!`
             _prepareBoard();
         } else {
             playerOneTitle.textContent = `${player}:`;
@@ -105,10 +111,12 @@ const gameplay = (function() {
             return;
         } else if (symbol === 'X') {
             gameboard.gameboard[i] = symbol;
+            infoBanner.textContent = `${playerTwo.name}'s Turn!`;
             checkWinRound(symbol);
             symbol = 'O';
         } else if (symbol === 'O') {
             gameboard.gameboard[i] = symbol;
+            infoBanner.textContent = `${playerOne.name}'s Turn!`;
             checkWinRound(symbol);
             symbol = 'X';
         }
@@ -124,6 +132,7 @@ const gameplay = (function() {
                 && gameboard.gameboard[i + 1] === symbol
                 && gameboard.gameboard[i + 2] === symbol) {
                 declareVictoryRound(symbol);
+                checkWinGame();
                 return;
             } 
         }
@@ -134,6 +143,7 @@ const gameplay = (function() {
                 && gameboard.gameboard[i + 3] === symbol
                 && gameboard.gameboard[i + 6] === symbol) {
                 declareVictoryRound(symbol);
+                checkWinGame();
                 return;
             }
         }
@@ -143,12 +153,14 @@ const gameplay = (function() {
             && gameboard.gameboard[4] === symbol
             && gameboard.gameboard[8] === symbol) {
             declareVictoryRound(symbol);
+            checkWinGame();
             return;
         }
         if (gameboard.gameboard[2] === symbol
             && gameboard.gameboard[4] === symbol
             && gameboard.gameboard[6] === symbol) {
             declareVictoryRound(symbol);
+            checkWinGame();
             return;
         }
     }
@@ -168,31 +180,28 @@ const gameplay = (function() {
 
     function checkWinGame() {
         // check to see if a player won the game 
-        if (playerOneScore.textContent === 3) {
+        if (playerOneScore.textContent === '3') {
             infoBanner.textContent = `${playerOne.name} wins the entire game!`
-        } else if (playerTwoScore.textContent === 3) {
+            nextRoundButton.classList.add('hidden');
+            playAgainButton.classList.remove('hidden');
+        } else if (playerTwoScore.textContent === '3') {
             infoBanner.textContent = `${playerTwo.name} wins the entire game!`
+            nextRoundButton.classList.add('hidden');
+            playAgainButton.classList.remove('hidden');
         }
     }
+    
+    nextRoundButton.addEventListener('click', () => {
+        nextRoundButton.classList.add('hidden');
+        infoBanner.textContent = `${playerOne.name}'s Turn!`;
+        gameboard.clearBoard();
+        _prepareBoard();
+        symbol = 'X';
+    })
 
     function resetRound() {
         // reset the game board to play the next round 
         nextRoundButton.classList.remove('hidden');
-        nextRoundButton.addEventListener('click', () => {
-            nextRoundButton.classList.add('hidden');
-            infoBanner.textContent = 'Player 1 Turn!';
-            gameboard.clearBoard();
-            gameboard.gameboard = ['', '', '', '', '', '', '', '', ''];
-            console.log(gameboard.gameboard);
-            _prepareBoard();
-        })
-        let squares = document.querySelectorAll('.square');
-        let squaresArray = Array.from(squares);
-        squaresArray.forEach((square) => {
-            square.removeEventListener('click', () => {
-                addMove(squaresArray.indexOf(square));
-            });
-        });
     }
 
     function resetGame() {

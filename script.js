@@ -1,6 +1,7 @@
 const playGameButton = document.querySelector('.play-game');
 const form = document.querySelector('.player-info');
 const submitButton = document.querySelector('.submit');
+const nextRoundButton = document.querySelector('.next-round');
 let labelBanner = document.querySelector('#player-name');
 let playerInput = document.querySelector('#player');
 let infoBanner = document.querySelector('.info-banner');
@@ -30,6 +31,8 @@ const gameboard = (function() {
     }
     function clearBoard() {
         // clear the gameboard 
+        gameboard = ['', '', '', '', '', '', '', '', ''];
+        displayGameboard();
     }
     return {
         gameboard: gameboard,
@@ -40,6 +43,7 @@ const gameboard = (function() {
 
 form.classList.add('hidden');
 infoBanner.classList.add('hidden');
+nextRoundButton.classList.add('hidden');
 gameboard.displayGameboard();
 
 
@@ -52,11 +56,6 @@ const gameplay = (function() {
         // play a game
         // first, gather player information and assign info to players 
         _getPlayerInfo();
-        
-        // second, play one round of tic-tac-toe 
-        _playRound();
-
-        // third, evaluate who ultimately wins a game to three 
     }
 
     function _getPlayerInfo() {
@@ -71,27 +70,30 @@ const gameplay = (function() {
     }
 
     function _submitPlayerInfo(i) {
+        // submit the player info using factory function
         let player = playerInput.value;
-        if (i === 0) {
-            playerOneTitle.textContent = `${player}:`;
-            playerOne = playerFactory(player, 'X');
-            playerInput.value = '';
-            labelBanner.textContent = 'Enter Player 2 Name'
-        } else {
+        if (i === 1) {
             playerTwoTitle.textContent = `${player}:`;
             playerTwo = playerFactory(player, 'O');
             form.classList.toggle('hidden');
             infoBanner.classList.toggle('hidden');
+            _prepareBoard();
+        } else {
+            playerOneTitle.textContent = `${player}:`;
+            playerOne = playerFactory(player, 'X');
+            playerInput.value = '';
+            labelBanner.textContent = 'Enter Player 2 Name'
         } 
     }
 
-    function _playRound() {
+    function _prepareBoard() {
+        // selects all squares and attaches an event listener 
+        // if squares are clicked, runs the addMove function
         let squares = document.querySelectorAll('.square');
         let squaresArray = Array.from(squares);
         squaresArray.forEach((square) => {
             square.addEventListener('click', () => {
                 addMove(squaresArray.indexOf(square));
-                console.log(squaresArray.indexOf(square));
             });
         });
     }
@@ -100,7 +102,7 @@ const gameplay = (function() {
         // add a move to the gameboard
         // then display the gameboard 
         if (gameboard.gameboard[i]) {
-            _playRound();
+            return;
         } else if (symbol === 'X') {
             gameboard.gameboard[i] = symbol;
             checkWinRound(symbol);
@@ -111,18 +113,17 @@ const gameplay = (function() {
             symbol = 'X';
         }
         gameboard.displayGameboard();
-        _playRound();
+        _prepareBoard();
     }
 
     function checkWinRound(symbol) {
         // check to see if a player won the round
-
         // check rows
         for (let i = 0; i < 9; i += 3) {
             if (gameboard.gameboard[i] === symbol 
                 && gameboard.gameboard[i + 1] === symbol
                 && gameboard.gameboard[i + 2] === symbol) {
-                declareVictory(symbol);
+                declareVictoryRound(symbol);
                 return;
             } 
         }
@@ -132,7 +133,7 @@ const gameplay = (function() {
             if (gameboard.gameboard[i] === symbol 
                 && gameboard.gameboard[i + 3] === symbol
                 && gameboard.gameboard[i + 6] === symbol) {
-                declareVictory(symbol);
+                declareVictoryRound(symbol);
                 return;
             }
         }
@@ -141,39 +142,68 @@ const gameplay = (function() {
         if (gameboard.gameboard[0] === symbol 
             && gameboard.gameboard[4] === symbol
             && gameboard.gameboard[8] === symbol) {
-            declareVictory(symbol);
+            declareVictoryRound(symbol);
             return;
         }
         if (gameboard.gameboard[2] === symbol
             && gameboard.gameboard[4] === symbol
             && gameboard.gameboard[6] === symbol) {
-            declareVictory(symbol);
+            declareVictoryRound(symbol);
             return;
         }
     }
 
-    function declareVictory(symbol) {
-        // declare that a player has won the game 
+    function declareVictoryRound(symbol) {
+        // declare that a player has won the round
         if (symbol === 'X') {
             infoBanner.textContent = `${playerOne.name} wins the round!`
+            playerOneScore.textContent++;
+            resetRound();
         } else {
             infoBanner.textContent = `${playerTwo.name} wins the round!`
+            playerTwoScore.textContent++;
+            resetRound();
         }
     }
 
     function checkWinGame() {
         // check to see if a player won the game 
+        if (playerOneScore.textContent === 3) {
+            infoBanner.textContent = `${playerOne.name} wins the entire game!`
+        } else if (playerTwoScore.textContent === 3) {
+            infoBanner.textContent = `${playerTwo.name} wins the entire game!`
+        }
     }
 
-    function reset() {
-        // reset the game board and everything 
+    function resetRound() {
+        // reset the game board to play the next round 
+        nextRoundButton.classList.remove('hidden');
+        nextRoundButton.addEventListener('click', () => {
+            nextRoundButton.classList.add('hidden');
+            infoBanner.textContent = 'Player 1 Turn!';
+            gameboard.clearBoard();
+            gameboard.gameboard = ['', '', '', '', '', '', '', '', ''];
+            console.log(gameboard.gameboard);
+            _prepareBoard();
+        })
+        let squares = document.querySelectorAll('.square');
+        let squaresArray = Array.from(squares);
+        squaresArray.forEach((square) => {
+            square.removeEventListener('click', () => {
+                addMove(squaresArray.indexOf(square));
+            });
+        });
+    }
+
+    function resetGame() {
+        // hi
     }
 
     return {
         playGame: playGame,
         checkWinRound: checkWinRound,
         checkWinGame: checkWinGame, 
-        reset: reset
+        reset: resetRound
     }
 })()
 

@@ -95,6 +95,13 @@ input[type='text']:focus {
     height: 50px;
 }
 
+.btn.next-round {
+    font-size: 24px;
+    font-weight: 500; 
+    width: 150px;
+    height: 40px;
+}
+
 .btn:hover {
     background-color: var(--light-yellow);
 }

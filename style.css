@@ -80,6 +80,7 @@ input[type='text']:focus {
 }
 
 .btn {
+    margin: 10px;
     padding: 5px;
     width: 60px; 
     border-radius: 10px;
@@ -95,7 +96,8 @@ input[type='text']:focus {
     height: 50px;
 }
 
-.btn.next-round {
+.btn.next-round,
+.btn.play-again {
     font-size: 24px;
     font-weight: 500; 
     width: 150px;
